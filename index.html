@@ -1,28 +1,91 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>wusefentai</title>
-		<style>
-    		body h1 {
-			width: 100%;
-			text-align: center;
-			color:pink;
-		}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>wusefentai</title>
+    <link rel="stylesheet" href="index.css">
+    <style>
+        body h1 {
+            width: 100%;
+            text-align: center;
+            color: pink;
+            z-index: 1;
+            position: relative;
+            user-select:none;
+        }
 
-		body {
-			display: flex;
-			align-items: center;
-			height:90vh;
-			background-image: url('f.jpg');
-    		background-size: cover; /* 保持原始尺寸 */
-   	 		background-repeat: no-repeat;
-        	background-position: center center;
-		}
-		</style>
-	</head>
-	<body>
-		<h1>wusefentai</h1>
-	</body>
+        body {
+            display: flex;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('f.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            transition: background-image 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+<h1>I'm wusefentai</h1>
+<script>
+    // 背景图片数组
+    const backgroundImages = [
+        'f.jpg',
+        '0ac1c4bd5b7e165ac0a8ca861a7c37bc.jpg'
+    ];
+    
+    let currentIndex = 0;
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    // 监听触摸开始事件
+    document.body.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    // 监听触摸结束事件
+    document.body.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+    
+    // 处理滑动逻辑
+    function handleSwipe() {
+        // 计算滑动距离
+        const swipeThreshold = 50; // 滑动阈值
+        
+        if (touchEndX < touchStartX - swipeThreshold) {
+            // 向左滑动，下一张
+            currentIndex = (currentIndex + 1) % backgroundImages.length;
+        } else if (touchEndX > touchStartX + swipeThreshold) {
+            // 向右滑动，上一张
+            currentIndex = (currentIndex - 1 + backgroundImages.length) % backgroundImages.length;
+        }
+        
+        // 更新背景图片
+        document.body.style.backgroundImage = `url('${backgroundImages[currentIndex]}')`;
+    }
+    
+    // 为桌面设备添加鼠标点击事件（可选）
+    let isDragging = false;
+    let mouseStartX = 0;
+    
+    document.body.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        mouseStartX = e.screenX;
+    });
+    
+    document.body.addEventListener('mouseup', (e) => {
+        if (isDragging) {
+            touchEndX = e.screenX;
+            touchStartX = mouseStartX;
+            handleSwipe();
+            isDragging = false;
+        }
+    });
+</script>
+</body>
 </html>
